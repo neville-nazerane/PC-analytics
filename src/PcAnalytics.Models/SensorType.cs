@@ -16,5 +16,7 @@ namespace PcAnalytics.Models
 
         public required string Name { get; set; }
 
+        public IEnumerable<Record>? Records { get; set; }
+
     }
 }

@@ -20,6 +20,8 @@ namespace PcAnalytics.Models
 
         public int SensorTypeId { get; set; }
 
+        public float? Value { get; set; }
+
         [Required]
         public SensorType? SensorType { get; set; }
 
@@ -27,6 +29,7 @@ namespace PcAnalytics.Models
 
         [Required]
         public SensorGroup? SensorGroup { get; set; }
+
 
     }
 }

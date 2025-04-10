@@ -22,5 +22,7 @@ namespace PcAnalytics.Models
         [Required]
         public Computer? Computer { get; set; }
 
+        public IEnumerable<SensorGroup>? SensorGroups { get; set; }
+
     }
 }
