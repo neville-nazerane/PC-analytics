@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PcAnalytics.Models;
+using PcAnalytics.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

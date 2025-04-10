@@ -5,16 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PcAnalytics.Models
+namespace PcAnalytics.Models.Entities
 {
 
-    [Index(nameof(Name))]
-    public class SensorType
+    [Index(nameof(Identifier))]
+    public class Computer
     {
 
         public int Id { get; set; }
 
-        public required string Name { get; set; }
+        public required string Identifier { get; set; }
+
+        public string? FriendlyName { get; set; }
 
         public IEnumerable<Record>? Records { get; set; }
 

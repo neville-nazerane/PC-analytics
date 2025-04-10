@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PcAnalytics.Models
+namespace PcAnalytics.Models.Entities
 {
 
     [Index(nameof(Name))]
