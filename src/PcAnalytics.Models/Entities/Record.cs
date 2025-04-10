@@ -16,12 +16,13 @@ namespace PcAnalytics.Models.Entities
 
         public int Id { get; set; }
 
-        public DateTime CreatedOn { get; set; }
+        public required DateTime CreatedOn { get; set; }
 
-        public int SensorTypeId { get; set; }
 
         public float? Value { get; set; }
 
+        public int SensorTypeId { get; set; }
+        
         [Required]
         public SensorType? SensorType { get; set; }
 

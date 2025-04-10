@@ -1,6 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.EntityFrameworkCore;
 using PcAnalytics.Models;
+using PcAnalytics.Models.Entities;
 using PcAnalytics.ServerLogic;
+using System.Collections.Immutable;
+using System.Threading;
 
 namespace PcAnalytics.OnlineApi
 {
@@ -9,7 +13,7 @@ namespace PcAnalytics.OnlineApi
 
 
         public static async Task AddIncomingAsync(HttpRequest request,
-                                                  IncomingSensorInput input,
+                                                  IEnumerable<IncomingSensorInput> input,
                                                   AppDbContext dbContext,
                                                   CancellationToken cancellationToken = default)
         {
@@ -23,9 +27,36 @@ namespace PcAnalytics.OnlineApi
                                                 .Select(c => c.Id)
                                                 .SingleOrDefaultAsync(cancellationToken: cancellationToken);
 
+                var dbHardwares = await dbContext.GetHardwaresAsync(computerId, input, cancellationToken: cancellationToken);
+                var types = await dbContext.GetSensorTypesAsync(computerId, input, cancellationToken);
+                var sensorGroups = await dbContext.GetSensorGroupsAsync(computerId, dbHardwares, input, cancellationToken);
+
+                var hardwareDict = dbHardwares.ToDictionary(h => h.Name, h => h.Id);
+                var typesDict = types.ToDictionary(t => t.Name, t => t.Id);
+
+                var createdOn = DateTime.UtcNow;
+
+                foreach (var item in input)
+                {
+                    var sensorGroupId = sensorGroups.Single(s => s.Name == item.SensorGroupName && s.HardwareId == hardwareDict[item.HardwareName])
+                                                    .Id;
+
+                    var entity = new Record
+                    {
+                        CreatedOn = createdOn,
+                        Value = item.Value,
+                        SensorGroupId = sensorGroupId,
+                        SensorTypeId = typesDict[item.SensorType]
+                    };
+
+                    await dbContext.AddAsync(entity, cancellationToken);
+                }
+
+                await dbContext.SaveChangesAsync(cancellationToken);
 
             }
         }
+
 
     }
 }
