@@ -8,10 +8,14 @@ using System.Threading.Tasks;
 
 namespace PcAnalytics.ClientBackground.Services
 {
-    public class ApiConsumer(HttpClient client)
+    public class OnlineConsumer(HttpClient client)
     {
         private readonly HttpClient _client = client;
 
+        public void SetComputerSerial(string serial)
+        {
+            _client.DefaultRequestHeaders.Add("computerSerial", serial);
+        }
 
         public async Task UploadIncomingAsync(IEnumerable<IncomingSensorInput> input,
                                               CancellationToken cancellationToken = default)

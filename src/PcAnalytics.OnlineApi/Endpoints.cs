@@ -43,8 +43,6 @@ namespace PcAnalytics.OnlineApi
                 var hardwareDict = dbHardwares.ToDictionary(h => h.Name, h => h.Id);
                 var typesDict = types.ToDictionary(t => t.Name, t => t.Id);
 
-                var createdOn = DateTime.UtcNow;
-
                 foreach (var item in input)
                 {
                     var sensorGroupId = sensorGroups.Single(s => s.Name == item.SensorGroupName && s.HardwareId == hardwareDict[item.HardwareName])
@@ -52,7 +50,7 @@ namespace PcAnalytics.OnlineApi
 
                     var entity = new Record
                     {
-                        CreatedOn = createdOn,
+                        CreatedOn = item.CreatedOn,
                         Value = item.Value,
                         SensorGroupId = sensorGroupId,
                         SensorTypeId = typesDict[item.SensorType]

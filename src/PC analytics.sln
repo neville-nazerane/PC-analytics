@@ -11,6 +11,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PcAnalytics.ServerLogic", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PcAnalytics.ClientBackground", "PcAnalytics.ClientBackground\PcAnalytics.ClientBackground.csproj", "{FB20271C-62CD-4E8C-A9A5-DAF8D27F1F74}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PcAnalytics.ClientApi", "PcAnalytics.ClientApi\PcAnalytics.ClientApi.csproj", "{BEBA7FB1-9947-46B2-8691-1885AB9F1468}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{61C74932-99ED-40D6-8577-7F3588C7868F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{E84A714B-1941-4093-A6A7-1FE70199185B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,9 +77,28 @@ Global
 		{FB20271C-62CD-4E8C-A9A5-DAF8D27F1F74}.Release|x64.Build.0 = Release|Any CPU
 		{FB20271C-62CD-4E8C-A9A5-DAF8D27F1F74}.Release|x86.ActiveCfg = Release|Any CPU
 		{FB20271C-62CD-4E8C-A9A5-DAF8D27F1F74}.Release|x86.Build.0 = Release|Any CPU
+		{BEBA7FB1-9947-46B2-8691-1885AB9F1468}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEBA7FB1-9947-46B2-8691-1885AB9F1468}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEBA7FB1-9947-46B2-8691-1885AB9F1468}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BEBA7FB1-9947-46B2-8691-1885AB9F1468}.Debug|x64.Build.0 = Debug|Any CPU
+		{BEBA7FB1-9947-46B2-8691-1885AB9F1468}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BEBA7FB1-9947-46B2-8691-1885AB9F1468}.Debug|x86.Build.0 = Debug|Any CPU
+		{BEBA7FB1-9947-46B2-8691-1885AB9F1468}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEBA7FB1-9947-46B2-8691-1885AB9F1468}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEBA7FB1-9947-46B2-8691-1885AB9F1468}.Release|x64.ActiveCfg = Release|Any CPU
+		{BEBA7FB1-9947-46B2-8691-1885AB9F1468}.Release|x64.Build.0 = Release|Any CPU
+		{BEBA7FB1-9947-46B2-8691-1885AB9F1468}.Release|x86.ActiveCfg = Release|Any CPU
+		{BEBA7FB1-9947-46B2-8691-1885AB9F1468}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EDB1A9A3-21B6-4166-8500-A71F5A323AD4} = {E84A714B-1941-4093-A6A7-1FE70199185B}
+		{FE5B9F95-9290-42C8-82BC-ED10EF57CF56} = {61C74932-99ED-40D6-8577-7F3588C7868F}
+		{418B7160-FE6C-4220-8F01-8D003789E83B} = {61C74932-99ED-40D6-8577-7F3588C7868F}
+		{FB20271C-62CD-4E8C-A9A5-DAF8D27F1F74} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{BEBA7FB1-9947-46B2-8691-1885AB9F1468} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C504D728-9996-4CFA-B61A-8A27AA005486}

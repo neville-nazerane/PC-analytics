@@ -13,8 +13,9 @@ namespace PcAnalytics.Models
         public required string SensorGroupName { get; set; }
 
         public required string SensorType { get; set; }
+        
+        public required DateTime CreatedOn { get; set; }
 
         public float? Value { get; set; }
-
     }
 }
