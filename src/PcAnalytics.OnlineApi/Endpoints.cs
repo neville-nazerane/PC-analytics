@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using PcAnalytics.Models;
 using PcAnalytics.Models.Entities;
 using PcAnalytics.ServerLogic;
@@ -11,6 +12,14 @@ namespace PcAnalytics.OnlineApi
     public static class Endpoints
     {
 
+        public static IEndpointConventionBuilder MapEndpoints(this IEndpointRouteBuilder endpoints)
+        {
+            var group = endpoints.MapGroup("");
+
+            group.MapPost("incoming", AddIncomingAsync);
+
+            return group;
+        }
 
         public static async Task AddIncomingAsync(HttpRequest request,
                                                   IEnumerable<IncomingSensorInput> input,

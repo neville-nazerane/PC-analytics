@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PcAnalytics.OnlineApi", "Pc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PcAnalytics.ServerLogic", "PcAnalytics.ServerLogic\PcAnalytics.ServerLogic.csproj", "{418B7160-FE6C-4220-8F01-8D003789E83B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PcAnalytics.ClientBackground", "PcAnalytics.ClientBackground\PcAnalytics.ClientBackground.csproj", "{FB20271C-62CD-4E8C-A9A5-DAF8D27F1F74}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{418B7160-FE6C-4220-8F01-8D003789E83B}.Release|x64.Build.0 = Release|Any CPU
 		{418B7160-FE6C-4220-8F01-8D003789E83B}.Release|x86.ActiveCfg = Release|Any CPU
 		{418B7160-FE6C-4220-8F01-8D003789E83B}.Release|x86.Build.0 = Release|Any CPU
+		{FB20271C-62CD-4E8C-A9A5-DAF8D27F1F74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB20271C-62CD-4E8C-A9A5-DAF8D27F1F74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB20271C-62CD-4E8C-A9A5-DAF8D27F1F74}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FB20271C-62CD-4E8C-A9A5-DAF8D27F1F74}.Debug|x64.Build.0 = Debug|Any CPU
+		{FB20271C-62CD-4E8C-A9A5-DAF8D27F1F74}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FB20271C-62CD-4E8C-A9A5-DAF8D27F1F74}.Debug|x86.Build.0 = Debug|Any CPU
+		{FB20271C-62CD-4E8C-A9A5-DAF8D27F1F74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB20271C-62CD-4E8C-A9A5-DAF8D27F1F74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB20271C-62CD-4E8C-A9A5-DAF8D27F1F74}.Release|x64.ActiveCfg = Release|Any CPU
+		{FB20271C-62CD-4E8C-A9A5-DAF8D27F1F74}.Release|x64.Build.0 = Release|Any CPU
+		{FB20271C-62CD-4E8C-A9A5-DAF8D27F1F74}.Release|x86.ActiveCfg = Release|Any CPU
+		{FB20271C-62CD-4E8C-A9A5-DAF8D27F1F74}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
