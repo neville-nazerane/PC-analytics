@@ -6,7 +6,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PcAnalytics.ClientBackground.Services
+namespace PcAnalytics.ClientApi.Service
 {
     public class OnlineConsumer(HttpClient client)
     {
