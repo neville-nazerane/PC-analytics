@@ -9,12 +9,13 @@ namespace PcAnalytics.ClientApi.Service
     {
         private readonly SemaphoreSlim _locker = new(1);
         private readonly string _sensorsFileLocation = Path.Combine(path, "sensors.json");
+        private readonly string _sensorsTempFileLocation = Path.Combine(path, "sensors-temp.json");
 
         private Stream? sensorReadStream;
         private Stream? sensorWriteStream;
         private bool _disposed;
 
-        public async Task StoreAsync(IEnumerable<IncomingSensorInput> sensorInputs,
+        public async Task StoreAsync(IEnumerable<SensorInput> sensorInputs,
                                      CancellationToken cancellationToken = default)
         {
             for (int i = 0; i < 3; i++) // retry
@@ -46,7 +47,7 @@ namespace PcAnalytics.ClientApi.Service
             }
         }
 
-        public async IAsyncEnumerable<IncomingSensorInput> ReadSensorInputs([EnumeratorCancellation] CancellationToken cancellationToken = default)
+        public async IAsyncEnumerable<SensorInput> ReadSensorInputsAsync([EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             await _locker.WaitAsync(cancellationToken);
 
@@ -54,7 +55,7 @@ namespace PcAnalytics.ClientApi.Service
             {
                 sensorReadStream ??= File.OpenRead(_sensorsFileLocation);
 
-                var res = JsonSerializer.DeserializeAsyncEnumerable<IncomingSensorInput>(sensorReadStream, cancellationToken: cancellationToken);
+                var res = JsonSerializer.DeserializeAsyncEnumerable<SensorInput>(sensorReadStream, cancellationToken: cancellationToken);
 
                 await foreach (var input in res)
                     if (input is not null)
@@ -67,6 +68,28 @@ namespace PcAnalytics.ClientApi.Service
 
         }
 
+        public async Task RemoveSensorInputsAsync(IEnumerable<SensorInput> inputs, CancellationToken cancellationToken = default)
+        {
+            await _locker.WaitAsync(cancellationToken);
+
+            try
+            {
+                sensorReadStream ??= File.OpenRead(_sensorsFileLocation);
+                await using var writing = File.Create(_sensorsTempFileLocation);
+
+                var res = JsonSerializer.DeserializeAsyncEnumerable<SensorInput>(sensorReadStream, cancellationToken: cancellationToken);
+
+                await foreach (var input in res)
+                {
+
+                }
+
+            }
+            finally
+            {
+                _locker.Release();
+            }
+        }
 
         public async ValueTask DisposeAsync()
         {

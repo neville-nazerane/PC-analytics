@@ -16,13 +16,13 @@ namespace PcAnalytics.OnlineApi
         {
             var group = endpoints.MapGroup("");
 
-            group.MapPost("incoming", AddIncomingAsync);
+            group.MapPost("sensorInputs", AddSensorInputAsync);
 
             return group;
         }
 
-        public static async Task AddIncomingAsync(HttpRequest request,
-                                                  IEnumerable<IncomingSensorInput> input,
+        public static async Task AddSensorInputAsync(HttpRequest request,
+                                                  IEnumerable<SensorInput> input,
                                                   AppDbContext dbContext,
                                                   CancellationToken cancellationToken = default)
         {

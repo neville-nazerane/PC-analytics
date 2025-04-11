@@ -29,7 +29,7 @@ namespace PcAnalytics.ServerLogic
 
 
         public async Task<IEnumerable<Hardware>> GetHardwaresAsync(int computerId,
-                                                                        IEnumerable<IncomingSensorInput> input,
+                                                                        IEnumerable<SensorInput> input,
                                                                         CancellationToken cancellationToken = default)
         {
             var hardwareNames = input.Select(i => i.HardwareName).Distinct().ToImmutableArray();
@@ -64,7 +64,7 @@ namespace PcAnalytics.ServerLogic
 
         public async Task<IEnumerable<SensorGroup>> GetSensorGroupsAsync(int computerId,
                                                                          IEnumerable<Hardware> hardwares,
-                                                                         IEnumerable<IncomingSensorInput> input,
+                                                                         IEnumerable<SensorInput> input,
                                                                          CancellationToken cancellationToken = default)
         {
 
@@ -107,7 +107,7 @@ namespace PcAnalytics.ServerLogic
         }
 
         public async Task<IEnumerable<SensorType>> GetSensorTypesAsync(int computerId,
-                                                                IEnumerable<IncomingSensorInput> input,
+                                                                IEnumerable<SensorInput> input,
                                                                 CancellationToken cancellationToken = default)
         {
             var typeNames = input.Select(i => i.SensorType).Distinct().ToImmutableArray();

@@ -44,7 +44,7 @@ public class Worker(ILogger<Worker> logger,
         {
             _logger.LogInformation("Logging next...");
 
-            var incomings = new List<IncomingSensorInput>();
+            var incomings = new List<SensorInput>();
 
             foreach (var hw in computer.Hardware)
             {

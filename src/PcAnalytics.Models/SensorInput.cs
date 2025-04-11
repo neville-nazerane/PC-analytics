@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PcAnalytics.Models
 {
-    public class IncomingSensorInput
+    public class SensorInput
     {
         public required string HardwareName { get; set; }
 

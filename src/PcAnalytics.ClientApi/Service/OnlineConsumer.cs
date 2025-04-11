@@ -17,10 +17,10 @@ namespace PcAnalytics.ClientApi.Service
             _client.DefaultRequestHeaders.Add("computerSerial", serial);
         }
 
-        public async Task UploadIncomingAsync(IEnumerable<IncomingSensorInput> input,
+        public async Task UploadAsync(IEnumerable<SensorInput> input,
                                               CancellationToken cancellationToken = default)
         {
-            using var response = await _client.PostAsJsonAsync("incoming", input, cancellationToken);
+            using var response = await _client.PostAsJsonAsync("sensorInputs", input, cancellationToken);
             response.EnsureSuccessStatusCode();
         }
 
