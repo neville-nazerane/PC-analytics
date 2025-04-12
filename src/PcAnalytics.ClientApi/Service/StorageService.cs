@@ -67,28 +67,45 @@ namespace PcAnalytics.ClientApi.Service
             }
 
         }
-
-        public async Task RemoveSensorInputsAsync(IEnumerable<SensorInput> inputs, CancellationToken cancellationToken = default)
+        public async Task ReadAndRemoveSensorInputsAsync(Func<SensorInput, bool> requiresDeletion,
+                                                         Func<Task<bool>> completionAction,
+                                                         CancellationToken cancellationToken = default)
         {
             await _locker.WaitAsync(cancellationToken);
 
             try
             {
                 sensorReadStream ??= File.OpenRead(_sensorsFileLocation);
-                await using var writing = File.Create(_sensorsTempFileLocation);
 
-                var res = JsonSerializer.DeserializeAsyncEnumerable<SensorInput>(sensorReadStream, cancellationToken: cancellationToken);
-
-                await foreach (var input in res)
+                await using (var tempStream = File.Create(_sensorsTempFileLocation))
                 {
+                    var res = JsonSerializer.DeserializeAsyncEnumerable<SensorInput>(sensorReadStream, cancellationToken: cancellationToken);
+
+                    await foreach (var input in res)
+                        if (input is not null && !requiresDeletion(input))
+                        {
+                            await JsonSerializer.SerializeAsync(tempStream, input, cancellationToken: cancellationToken);
+                        }
+                    await tempStream.FlushAsync(cancellationToken: cancellationToken);
 
                 }
 
+                if (await completionAction())
+                {
+                    await sensorReadStream.DisposeAsync();
+
+                    if (sensorWriteStream is not null)
+                        await sensorWriteStream.DisposeAsync();
+                    sensorReadStream = sensorWriteStream = null;
+
+                    File.Replace(_sensorsTempFileLocation, _sensorsFileLocation, null);
+                }
             }
             finally
             {
                 _locker.Release();
             }
+
         }
 
         public async ValueTask DisposeAsync()

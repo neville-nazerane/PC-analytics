@@ -17,27 +17,32 @@ namespace PcAnalytics.ClientApi
             return group;
         }
 
-        public static async Task UploadInputsAsync(StorageService storageService,
-                                             OnlineConsumer onlineConsumer,
-                                                CancellationToken cancellationToken = default)
+        public static Task UploadInputsAsync(StorageService storageService,
+                                                   OnlineConsumer onlineConsumer,
+                                                   CancellationToken cancellationToken = default)
         {
             var toUpload = new List<SensorInput>();
-            var items = storageService.ReadSensorInputsAsync(cancellationToken);
 
-            bool stoppedInbetween = false;
-
-            await foreach (var item in items)
-            {
-                toUpload.Add(item);
-                if (toUpload.Count > 200)
-                {
-                    stoppedInbetween = true;
-                    break;
-                }
-            }
-
-            await onlineConsumer.UploadAsync(toUpload, cancellationToken);
-
+            return storageService.ReadAndRemoveSensorInputsAsync(input =>
+                                           {
+                                               if (toUpload.Count < 200)
+                                               {
+                                                   toUpload.Add(input);
+                                                   return true;
+                                               }
+                                               return false;
+                                           }, async () =>
+                                           {
+                                               try
+                                               {
+                                                   await onlineConsumer.UploadAsync(toUpload, cancellationToken);
+                                                   return true;
+                                               }
+                                               catch
+                                               {
+                                                   return false;
+                                               }
+                                           }, cancellationToken);
         }
 
         public static Task AddSensorInputsAsync(IEnumerable<SensorInput> inputs,
