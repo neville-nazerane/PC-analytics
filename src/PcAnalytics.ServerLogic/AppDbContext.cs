@@ -14,6 +14,13 @@ namespace PcAnalytics.ServerLogic
 
     public class AppDbContext : DbContext
     {
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        {
+        }
+
+        protected AppDbContext()
+        {
+        }
 
         public DbSet<Computer> Computers { get; set; }
 
@@ -62,8 +69,7 @@ namespace PcAnalytics.ServerLogic
             return await query.ToListAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<SensorGroup>> GetSensorGroupsAsync(int computerId,
-                                                                         IEnumerable<Hardware> hardwares,
+        public async Task<IEnumerable<SensorGroup>> GetSensorGroupsAsync(IEnumerable<Hardware> hardwares,
                                                                          IEnumerable<SensorInput> input,
                                                                          CancellationToken cancellationToken = default)
         {

@@ -38,7 +38,7 @@ namespace PcAnalytics.OnlineApi
 
                 var dbHardwares = await dbContext.GetHardwaresAsync(computerId, input, cancellationToken: cancellationToken);
                 var types = await dbContext.GetSensorTypesAsync(computerId, input, cancellationToken);
-                var sensorGroups = await dbContext.GetSensorGroupsAsync(computerId, dbHardwares, input, cancellationToken);
+                var sensorGroups = await dbContext.GetSensorGroupsAsync(dbHardwares, input, cancellationToken);
 
                 var hardwareDict = dbHardwares.ToDictionary(h => h.Name, h => h.Id);
                 var typesDict = types.ToDictionary(t => t.Name, t => t.Id);

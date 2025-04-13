@@ -6,6 +6,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\PcAnalytics.Models\PcAnalytics.Models.csproj" />
     <ProjectReference Include="..\PcAnalytics.ServerLogic\PcAnalytics.ServerLogic.csproj" />
