@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace PcAnalytics.Models.Entities
 {
 
-    [Index(nameof(Name))]
+    [Index(nameof(ComputerId), nameof(Name))]
     public class Hardware
     {
 

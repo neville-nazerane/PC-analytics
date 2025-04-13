@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace PcAnalytics.Models.Entities
 {
 
-    [Index(nameof(Name))]
+    [Index(nameof(HardwareId), nameof(Name))]
     public class SensorGroup
     {
 
