@@ -1,3 +1,5 @@
+using LibreHardwareMonitor.Hardware.Motherboard;
+using LibreHardwareMonitor.Hardware;
 using PcAnalytics.ClientApi.Service;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +14,13 @@ services.AddHttpClient<OnlineConsumer>(c =>
 {
     c.BaseAddress = new(configs["onlineEndpoint"] ?? throw new Exception("online endpoint not configured"));
 });
+var infoService = new InfoService();
+infoService.Init();
+services.AddSingleton(infoService);
+
 
 app.MapGet("/", () => "Hello Client World!");
 
 await app.RunAsync();
+
+

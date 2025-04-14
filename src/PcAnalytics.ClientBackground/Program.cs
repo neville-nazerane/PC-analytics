@@ -1,14 +1,15 @@
 using PcAnalytics.ClientBackground;
+using PcAnalytics.ClientBackground.Services;
 
 var builder = Host.CreateApplicationBuilder(args);
 
 var configs = builder.Configuration;
 var services = builder.Services;
 
-//services.AddHttpClient<OnlineConsumer>(c =>
-//{
-//    c.BaseAddress = new(configs["onlineEndpoint"] ?? throw new Exception("online endpoint not configured"));
-//});
+services.AddHttpClient<LocalApiConsumer>(c =>
+{
+    c.BaseAddress = new(configs["localEndpoint"] ?? throw new Exception("local endpoint not configured"));
+});
 
 services.AddHostedService<Worker>();
 

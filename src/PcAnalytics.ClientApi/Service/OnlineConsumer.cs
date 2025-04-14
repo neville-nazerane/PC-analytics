@@ -12,13 +12,13 @@ namespace PcAnalytics.ClientApi.Service
     {
         private readonly HttpClient _client = client;
 
-        public void SetComputerSerial(string serial)
+        public void SetComputerSerial(InfoService service)
         {
-            _client.DefaultRequestHeaders.Add("computerSerial", serial);
+            _client.DefaultRequestHeaders.Add("computerSerial", service.Serial);
         }
 
         public async Task UploadAsync(IEnumerable<SensorInput> input,
-                                              CancellationToken cancellationToken = default)
+                                      CancellationToken cancellationToken = default)
         {
             using var response = await _client.PostAsJsonAsync("sensorInputs", input, cancellationToken);
             response.EnsureSuccessStatusCode();

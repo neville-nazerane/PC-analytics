@@ -30,15 +30,13 @@ public class Worker(ILogger<Worker> logger,
         };
         computer.Open();
 
-        var serial = ((Motherboard)computer.Hardware.Single(h => h.HardwareType == HardwareType.Motherboard)).SMBios.Board.SerialNumber;
 
         await using (var scope = _serviceProvider.CreateAsyncScope())
         {
-            var client = scope.ServiceProvider.GetRequiredService<OnlineConsumer>();
-            client.SetComputerSerial(serial);
+            var client = scope.ServiceProvider.GetRequiredService<LocalApiConsumer>();
+            //client.SetComputerSerial(serial);
         }
 
-        var storageAddress = _configuration["storagePath"];
 
         while (!stoppingToken.IsCancellationRequested)
         {
