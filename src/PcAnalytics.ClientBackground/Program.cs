@@ -4,6 +4,8 @@ using PcAnalytics.ClientBackground.Services;
 var builder = Host.CreateApplicationBuilder(args);
 
 var configs = builder.Configuration;
+if (builder.Environment.IsDevelopment())
+    configs.AddUserSecrets("analytics client");
 var services = builder.Services;
 
 services.AddHttpClient<LocalApiConsumer>(c =>

@@ -1,4 +1,5 @@
-﻿using PcAnalytics.ClientApi.Service;
+﻿using Microsoft.AspNetCore.Mvc;
+using PcAnalytics.ClientApi.Service;
 using PcAnalytics.Models;
 
 namespace PcAnalytics.ClientApi
@@ -45,10 +46,10 @@ namespace PcAnalytics.ClientApi
                                            }, cancellationToken);
         }
 
-        public static Task AddSensorInputsAsync(IEnumerable<SensorInput> inputs,
+        public static Task AddSensorInputsAsync([FromBody] IEnumerable<SensorInput> inputs,
                                                 StorageService storageService,
                                                 CancellationToken cancellationToken = default)
-            => storageService.StoreAsync(inputs, cancellationToken);
+        =>  storageService.StoreAsync(inputs, cancellationToken);
 
         public static IAsyncEnumerable<SensorInput> GetLocalSensorInputsAsync(StorageService storageService,
                                                                               CancellationToken cancellationToken = default)
