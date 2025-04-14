@@ -118,14 +118,9 @@ namespace PcAnalytics.ServerLogic.Migrations
                 column: "Identifier");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Hardwares_ComputerId",
+                name: "IX_Hardwares_ComputerId_Name",
                 table: "Hardwares",
-                column: "ComputerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Hardwares_Name",
-                table: "Hardwares",
-                column: "Name");
+                columns: new[] { "ComputerId", "Name" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Records_ComputerId",
@@ -143,14 +138,9 @@ namespace PcAnalytics.ServerLogic.Migrations
                 column: "SensorTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SensorGroups_HardwareId",
+                name: "IX_SensorGroups_HardwareId_Name",
                 table: "SensorGroups",
-                column: "HardwareId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SensorGroups_Name",
-                table: "SensorGroups",
-                column: "Name");
+                columns: new[] { "HardwareId", "Name" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_SensorTypes_Name",

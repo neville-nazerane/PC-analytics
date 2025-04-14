@@ -61,9 +61,7 @@ namespace PcAnalytics.ServerLogic.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ComputerId");
-
-                    b.HasIndex("Name");
+                    b.HasIndex("ComputerId", "Name");
 
                     b.ToTable("Hardwares");
                 });
@@ -119,9 +117,7 @@ namespace PcAnalytics.ServerLogic.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HardwareId");
-
-                    b.HasIndex("Name");
+                    b.HasIndex("HardwareId", "Name");
 
                     b.ToTable("SensorGroups");
                 });

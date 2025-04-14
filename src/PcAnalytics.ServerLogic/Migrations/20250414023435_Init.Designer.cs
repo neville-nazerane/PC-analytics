@@ -12,7 +12,7 @@ using PcAnalytics.ServerLogic;
 namespace PcAnalytics.ServerLogic.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250413000856_Init")]
+    [Migration("20250414023435_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -64,9 +64,7 @@ namespace PcAnalytics.ServerLogic.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ComputerId");
-
-                    b.HasIndex("Name");
+                    b.HasIndex("ComputerId", "Name");
 
                     b.ToTable("Hardwares");
                 });
@@ -122,9 +120,7 @@ namespace PcAnalytics.ServerLogic.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HardwareId");
-
-                    b.HasIndex("Name");
+                    b.HasIndex("HardwareId", "Name");
 
                     b.ToTable("SensorGroups");
                 });
