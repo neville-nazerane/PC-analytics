@@ -38,8 +38,10 @@ public class Worker(ILogger<Worker> logger,
         }
 
 
+        int count = 0;
         while (!stoppingToken.IsCancellationRequested)
         {
+            count++;
             _logger.LogInformation("Logging next...");
 
             var incomings = new List<SensorInput>();
@@ -63,6 +65,14 @@ public class Worker(ILogger<Worker> logger,
                 }
             }
 
+            await using (var scope = _serviceProvider.CreateAsyncScope())
+            {
+                var client = scope.ServiceProvider.GetRequiredService<LocalApiConsumer>();
+                await client.AddAsync(incomings, stoppingToken);
+
+                if (count % 10 == 0)
+                    await client.UploadAsync(stoppingToken);
+            }
 
             _logger.LogInformation("Done recording next...");
 

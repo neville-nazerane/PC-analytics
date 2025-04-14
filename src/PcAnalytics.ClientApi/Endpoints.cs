@@ -12,7 +12,7 @@ namespace PcAnalytics.ClientApi
 
             group.MapPost("sensorInputs", AddSensorInputsAsync);
             group.MapGet("sensorInputs", GetLocalSensorInputsAsync);
-            group.MapPost("sensorInputs/upload", UploadInputsAsync);
+            group.MapPost("sensorInputs/uploadStored", UploadInputsAsync);
 
             return group;
         }
