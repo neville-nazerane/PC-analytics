@@ -14,7 +14,7 @@ var services = builder.Services;
 //{
 //    return new StorageService(configs["storagePath"] ?? throw new Exception("storage path not configured"));
 //});
-services.AddDbContext<AppDbContext>(o => o.UseSqlite($"Data Source={configs["storagePath"]}.db"));
+services.AddDbContext<AppDbContext>(o => o.UseSqlite($"Data Source={configs["storagePath"]}/localstore.db"));
 services.AddHttpClient<OnlineConsumer>(c =>
 {
     c.BaseAddress = new(configs["onlineEndpoint"] ?? throw new Exception("online endpoint not configured"));
@@ -28,6 +28,18 @@ var app = builder.Build();
 app.MapGet("/", () => "Hello Client World!");
 app.MapEndpoints();
 
+
+await SetupAsync(app.Services);
+
 await app.RunAsync();
 
+
+async Task SetupAsync(IServiceProvider serviceProvider)
+{
+    await using var scope = serviceProvider.CreateAsyncScope();
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var migrations = await db.Database.GetPendingMigrationsAsync();
+    foreach (var migration in migrations)
+        await db.Database.MigrateAsync(migration);
+}
 

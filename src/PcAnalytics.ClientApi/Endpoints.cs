@@ -36,7 +36,7 @@ namespace PcAnalytics.ClientApi
 
                 await onlineConsumer.UploadAsync(items, cancellationToken);
 
-                dbContext.Remove(items);
+                dbContext.SensorInputs.RemoveRange(items);
                 await dbContext.SaveChangesAsync(cancellationToken);
             }
         }
