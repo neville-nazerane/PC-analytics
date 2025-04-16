@@ -38,8 +38,6 @@ async Task SetupAsync(IServiceProvider serviceProvider)
 {
     await using var scope = serviceProvider.CreateAsyncScope();
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    var migrations = await db.Database.GetPendingMigrationsAsync();
-    foreach (var migration in migrations)
-        await db.Database.MigrateAsync(migration);
+    await db.Database.MigrateAsync();
 }
 
