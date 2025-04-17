@@ -77,11 +77,12 @@ namespace PcAnalytics.ServerLogic
             var groups = input.Select(i => new
             {
                 i.SensorGroupName,
-                HardwareId = hardwares.Single(h => h.Name == i.SensorGroupName).Id
+                HardwareId = hardwares.Single(h => h.Name == i.HardwareName).Id
             })
                 .ToImmutableArray();
 
             var groupNames = input.Select(i => i.SensorGroupName).Distinct().ToImmutableArray();
+            var hardwareIds = hardwares.Select(h => h.Id).Distinct().ToImmutableArray();
 
             var query = SensorGroups
                                 .AsNoTracking()

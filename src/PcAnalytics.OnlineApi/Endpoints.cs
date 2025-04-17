@@ -37,6 +37,13 @@ namespace PcAnalytics.OnlineApi
                                                 .Select(c => c.Id)
                                                 .SingleOrDefaultAsync(cancellationToken: cancellationToken);
 
+                if (computerId == 0)
+                {
+                    var entity = await dbContext.Computers.AddAsync(new() { Identifier = serial }, cancellationToken);
+                    await dbContext.SaveChangesAsync(cancellationToken);
+                    computerId = entity.Entity.Id;
+                }
+
                 var dbHardwares = await dbContext.GetHardwaresAsync(computerId, input, cancellationToken: cancellationToken);
                 var types = await dbContext.GetSensorTypesAsync(computerId, input, cancellationToken);
                 var sensorGroups = await dbContext.GetSensorGroupsAsync(dbHardwares, input, cancellationToken);
@@ -63,6 +70,7 @@ namespace PcAnalytics.OnlineApi
                 await dbContext.SaveChangesAsync(cancellationToken);
 
             }
+            else throw new Exception("No serial header found");
         }
 
 
