@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using PcAnalytics.Models;
@@ -22,9 +23,9 @@ namespace PcAnalytics.OnlineApi
         }
 
         public static async Task AddSensorInputAsync(HttpRequest request,
-                                                  IEnumerable<SensorInput> input,
-                                                  AppDbContext dbContext,
-                                                  CancellationToken cancellationToken = default)
+                                                    [FromBody] IEnumerable<SensorInput> input,
+                                                    AppDbContext dbContext,
+                                                    CancellationToken cancellationToken = default)
         {
 
             if (request.Headers.TryGetValue("computerSerial", out var computerIds))
