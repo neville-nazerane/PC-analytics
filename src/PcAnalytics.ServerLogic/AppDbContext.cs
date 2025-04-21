@@ -79,6 +79,7 @@ namespace PcAnalytics.ServerLogic
                 i.SensorGroupName,
                 HardwareId = hardwares.Single(h => h.Name == i.HardwareName).Id
             })
+                .Distinct()
                 .ToImmutableArray();
 
             var groupNames = input.Select(i => i.SensorGroupName).Distinct().ToImmutableArray();
