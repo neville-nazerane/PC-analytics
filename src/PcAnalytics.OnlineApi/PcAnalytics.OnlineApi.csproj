@@ -15,7 +15,6 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PcAnalytics.Models\PcAnalytics.Models.csproj" />
     <ProjectReference Include="..\PcAnalytics.ServerLogic\PcAnalytics.ServerLogic.csproj" />
   </ItemGroup>
 
