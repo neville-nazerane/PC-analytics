@@ -48,7 +48,7 @@ stages:
     jobs:
       - deployment: Deployment
         variables:
-          - group: auth
+          - group: analytics-online
         displayName: Deploy to Development VM
         environment:
           name: Development
