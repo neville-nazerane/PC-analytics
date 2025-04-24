@@ -1,5 +1,9 @@
-﻿using PcAnalytics.ClientApi.Service;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using PcAnalytics.ClientApi.Service;
 using PcAnalytics.Models;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace PcAnalytics.ClientApi
 {
@@ -12,47 +16,48 @@ namespace PcAnalytics.ClientApi
 
             group.MapPost("sensorInputs", AddSensorInputsAsync);
             group.MapGet("sensorInputs", GetLocalSensorInputsAsync);
-            group.MapPost("sensorInputs/upload", UploadInputsAsync);
+            group.MapPost("sensorInputs/uploadStored", UploadInputsAsync);
 
             return group;
         }
 
-        public static Task UploadInputsAsync(StorageService storageService,
+        public static async Task UploadInputsAsync(AppDbContext dbContext,
                                                    OnlineConsumer onlineConsumer,
                                                    CancellationToken cancellationToken = default)
         {
-            var toUpload = new List<SensorInput>();
+            var count = await dbContext.SensorInputs.CountAsync(cancellationToken: cancellationToken);
 
-            return storageService.ReadAndRemoveSensorInputsAsync(input =>
-                                           {
-                                               if (toUpload.Count < 200)
-                                               {
-                                                   toUpload.Add(input);
-                                                   return true;
-                                               }
-                                               return false;
-                                           }, async () =>
-                                           {
-                                               try
-                                               {
-                                                   await onlineConsumer.UploadAsync(toUpload, cancellationToken);
-                                                   return true;
-                                               }
-                                               catch
-                                               {
-                                                   return false;
-                                               }
-                                           }, cancellationToken);
+            for (int i = 0; i < count / 200; i++)
+            {
+                var items = await dbContext.SensorInputs
+                                           .OrderBy(i => i.CreatedOn)
+                                           .Take(200)
+                                           .ToListAsync(cancellationToken: cancellationToken);
+
+                await onlineConsumer.UploadAsync(items, cancellationToken);
+
+                dbContext.SensorInputs.RemoveRange(items);
+                await dbContext.SaveChangesAsync(cancellationToken);
+            }
         }
 
-        public static Task AddSensorInputsAsync(IEnumerable<SensorInput> inputs,
-                                                StorageService storageService,
-                                                CancellationToken cancellationToken = default)
-            => storageService.StoreAsync(inputs, cancellationToken);
+        public static async Task AddSensorInputsAsync([FromBody] IEnumerable<SensorInput> inputs,
+                                                      AppDbContext dbContext,
+                                                      CancellationToken cancellationToken = default)
+        {
+            await dbContext.SensorInputs.AddRangeAsync(inputs, cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
+        }
 
-        public static IAsyncEnumerable<SensorInput> GetLocalSensorInputsAsync(StorageService storageService,
-                                                                              CancellationToken cancellationToken = default)
-            => storageService.ReadSensorInputsAsync(cancellationToken);
-
+        public static async IAsyncEnumerable<SensorInput> GetLocalSensorInputsAsync(AppDbContext dbContext,
+                                                                                    [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            var res = dbContext.SensorInputs.AsAsyncEnumerable();
+            await foreach (var item in res)
+            {
+                yield return item;
+                cancellationToken.ThrowIfCancellationRequested();
+            }
+        }
     }
 }

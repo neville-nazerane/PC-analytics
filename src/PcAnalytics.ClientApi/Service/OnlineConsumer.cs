@@ -8,17 +8,23 @@ using System.Threading.Tasks;
 
 namespace PcAnalytics.ClientApi.Service
 {
-    public class OnlineConsumer(HttpClient client)
+    public class OnlineConsumer
     {
-        private readonly HttpClient _client = client;
+        private readonly HttpClient _client;
 
-        public void SetComputerSerial(string serial)
+        public OnlineConsumer(HttpClient client, InfoService service)
         {
-            _client.DefaultRequestHeaders.Add("computerSerial", serial);
+            _client = client;
+            _client.DefaultRequestHeaders.Add("computerSerial", service.Serial);
+
         }
 
+        //public void SetComputerSerial()
+        //{
+        //}
+
         public async Task UploadAsync(IEnumerable<SensorInput> input,
-                                              CancellationToken cancellationToken = default)
+                                      CancellationToken cancellationToken = default)
         {
             using var response = await _client.PostAsJsonAsync("sensorInputs", input, cancellationToken);
             response.EnsureSuccessStatusCode();

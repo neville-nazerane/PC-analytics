@@ -30,18 +30,18 @@ public class Worker(ILogger<Worker> logger,
         };
         computer.Open();
 
-        var serial = ((Motherboard)computer.Hardware.Single(h => h.HardwareType == HardwareType.Motherboard)).SMBios.Board.SerialNumber;
 
         await using (var scope = _serviceProvider.CreateAsyncScope())
         {
-            var client = scope.ServiceProvider.GetRequiredService<OnlineConsumer>();
-            client.SetComputerSerial(serial);
+            var client = scope.ServiceProvider.GetRequiredService<LocalApiConsumer>();
+            //client.SetComputerSerial(serial);
         }
 
-        var storageAddress = _configuration["storagePath"];
 
+        int count = 0;
         while (!stoppingToken.IsCancellationRequested)
         {
+            count++;
             _logger.LogInformation("Logging next...");
 
             var incomings = new List<SensorInput>();
@@ -65,6 +65,14 @@ public class Worker(ILogger<Worker> logger,
                 }
             }
 
+            await using (var scope = _serviceProvider.CreateAsyncScope())
+            {
+                var client = scope.ServiceProvider.GetRequiredService<LocalApiConsumer>();
+                await client.AddAsync(incomings, stoppingToken);
+
+                if (count % 10 == 0)
+                    await client.UploadAsync(stoppingToken);
+            }
 
             _logger.LogInformation("Done recording next...");
 

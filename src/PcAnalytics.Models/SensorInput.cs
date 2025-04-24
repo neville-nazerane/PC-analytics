@@ -10,6 +10,9 @@ namespace PcAnalytics.Models
 
     public class SensorInput
     {
+
+        public int Id { get; set; }
+
         public required string HardwareName { get; set; }
 
         public required string SensorGroupName { get; set; }

@@ -77,17 +77,21 @@ namespace PcAnalytics.ServerLogic
             var groups = input.Select(i => new
             {
                 i.SensorGroupName,
-                HardwareId = hardwares.Single(h => h.Name == i.SensorGroupName).Id
+                HardwareId = hardwares.Single(h => h.Name == i.HardwareName).Id
             })
+                .Distinct()
                 .ToImmutableArray();
 
             var groupNames = input.Select(i => i.SensorGroupName).Distinct().ToImmutableArray();
+            var hardwareIds = hardwares.Select(h => h.Id).Distinct().ToImmutableArray();
 
             var query = SensorGroups
                                 .AsNoTracking()
-                                .Where(g => groups.Any(i => g.Name == i.SensorGroupName && g.HardwareId == i.HardwareId));
+                                .Where(g => groupNames.Contains(g.Name) && hardwareIds.Contains(g.HardwareId));
 
             var existingGroups = await query.ToListAsync(cancellationToken);
+            existingGroups = [.. existingGroups.Where(g => groups.Any(i => g.Name == i.SensorGroupName && g.HardwareId == i.HardwareId))];
+
 
             var missing = groups
                             .Where(g => !existingGroups.Any(e => e.Name == g.SensorGroupName && e.HardwareId == g.HardwareId))
@@ -108,8 +112,10 @@ namespace PcAnalytics.ServerLogic
                 await SaveChangesAsync(cancellationToken);
             }
 
-            return await query.ToListAsync(cancellationToken);
+            var res = await query.ToListAsync(cancellationToken);
+            res = [.. res.Where(g => groups.Any(i => g.Name == i.SensorGroupName && g.HardwareId == i.HardwareId))];
 
+            return res; 
         }
 
         public async Task<IEnumerable<SensorType>> GetSensorTypesAsync(int computerId,

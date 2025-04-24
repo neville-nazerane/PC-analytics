@@ -1,0 +1,114 @@
+
+pool: hosted-linux
+
+pr: none
+
+
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - src/PcAnalytics.Models
+      - src/PcAnalytics.ServerLogic
+      - src/PcAnalytics.OnlineApi
+      - pipelines/webAPI.yaml
+
+variables:
+  projectPath: src/PcAnalytics.OnlineApi
+  projectName: PcAnalytics.OnlineApi
+  deploymentDestDirectory: /var/www/analytics
+
+  service.name: kestrel-analytics
+  service.url: http://localhost:5090
+  service.description: PC analytics
+
+stages:
+  - stage: 
+    displayName: Build
+    jobs:
+
+    - job: Compile
+      steps:
+
+      - script: |
+          dotnet publish $(projectPath) -c release -o published
+          mkdir -p compressed
+          tar -czf compressed/$(projectName).tar.gz -C published .
+        displayName: Publishing API
+
+      - publish: compressed
+        displayName: Publish for release
+        artifact: published
+
+  - stage: CD
+    displayName: Deploy to the VM
+
+    jobs:
+      - deployment: Deployment
+        variables:
+          - group: auth
+        displayName: Deploy to Development VM
+        environment:
+          name: Development
+          resourceType: VirtualMachine
+          resourceName: Web Server
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+
+                - checkout: none
+
+                - download: current
+                  displayName: download published artifact
+                  artifact: published
+
+                - script: |
+
+                    sudo tee $(Pipeline.Workspace)/published/linux.service > /dev/null <<EOF
+                    [Unit]
+                    Description=$(service.description)
+
+                    [Install]
+                    WantedBy=multi-user.target
+
+                    [Service]
+                    WorkingDirectory=$(deploymentDestDirectory)
+                    ExecStart=/usr/bin/dotnet $(deploymentDestDirectory)/$(projectName).dll --urls $(service.url)
+                    Restart=always
+                    # Restart service after 10 seconds if the dotnet service crashes:
+                    RestartSec=10
+                    KillSignal=SIGINT
+                    SyslogIdentifier=$(service.name)
+                    User=root
+                    Environment=sqlConnString='$(sqlConnString)'
+                    EOF
+
+                  displayName: Generate Service File
+                  failOnStderr: true
+                  
+                - script: |
+                    sudo rm -rf $(deploymentDestDirectory)
+                    sudo mkdir -p $(deploymentDestDirectory)
+                    sudo tar -xzf $(projectName).tar.gz -C $(deploymentDestDirectory)
+                  displayName: copying binaries
+                  failOnStderr: true
+                  workingDirectory: $(Pipeline.Workspace)/published
+                  
+                - script: |
+                    sudo mv linux.service /etc/systemd/system/$(service.name).service -f
+                    
+                    sudo systemctl enable $(service.name).service 
+                    sudo systemctl stop $(service.name).service 
+                    sudo systemctl start $(service.name).service
+                  displayName: restarting service
+                  workingDirectory: $(Pipeline.Workspace)/published
+
+                - script: rm -rf *
+                  displayName: Clean up
+                  
+                - task: DeleteFiles@1
+                  displayName: Clean up
+                              

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using PcAnalytics.Models;
@@ -22,9 +23,9 @@ namespace PcAnalytics.OnlineApi
         }
 
         public static async Task AddSensorInputAsync(HttpRequest request,
-                                                  IEnumerable<SensorInput> input,
-                                                  AppDbContext dbContext,
-                                                  CancellationToken cancellationToken = default)
+                                                    [FromBody] IEnumerable<SensorInput> input,
+                                                    AppDbContext dbContext,
+                                                    CancellationToken cancellationToken = default)
         {
 
             if (request.Headers.TryGetValue("computerSerial", out var computerIds))
@@ -35,6 +36,13 @@ namespace PcAnalytics.OnlineApi
                                                 .Where(c => c.Identifier == serial)
                                                 .Select(c => c.Id)
                                                 .SingleOrDefaultAsync(cancellationToken: cancellationToken);
+
+                if (computerId == 0)
+                {
+                    var entity = await dbContext.Computers.AddAsync(new() { Identifier = serial }, cancellationToken);
+                    await dbContext.SaveChangesAsync(cancellationToken);
+                    computerId = entity.Entity.Id;
+                }
 
                 var dbHardwares = await dbContext.GetHardwaresAsync(computerId, input, cancellationToken: cancellationToken);
                 var types = await dbContext.GetSensorTypesAsync(computerId, input, cancellationToken);
@@ -62,6 +70,7 @@ namespace PcAnalytics.OnlineApi
                 await dbContext.SaveChangesAsync(cancellationToken);
 
             }
+            else throw new Exception("No serial header found");
         }
 
 
