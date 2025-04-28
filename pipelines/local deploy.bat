@@ -8,3 +8,10 @@ dotnet publish ..\src\PcAnalytics.ClientBackground -c Release -o published\Clien
 echo @echo off > published\run.bat
 echo start "" ClientApi\PcAnalytics.ClientApi.exe >> published\run.bat
 echo start "" ClientBackground\PcAnalytics.ClientBackground.exe >> published\run.bat
+
+> published\configs.json (
+echo {
+echo   "storagePath": "",
+echo   "onlineEndpoint": ""
+echo }
+)
