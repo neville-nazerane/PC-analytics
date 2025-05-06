@@ -9,9 +9,13 @@ echo @echo off > published\run.bat
 echo start "" /min ClientApi\PcAnalytics.ClientApi.exe >> published\run.bat
 echo start "" /min ClientBackground\PcAnalytics.ClientBackground.exe >> published\run.bat
 
-> published\configs.json (
-echo {
-echo   "storagePath": "",
-echo   "onlineEndpoint": ""
-echo }
+if exist configs.json (
+    copy /Y configs.json published\configs.json
+) else (
+    > published\configs.json (
+        echo {
+        echo   "storagePath": "",
+        echo   "onlineEndpoint": ""
+        echo }
+    )
 )
