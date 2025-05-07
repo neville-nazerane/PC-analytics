@@ -6,12 +6,8 @@ var configs = builder.Configuration;
 if (builder.Environment.IsDevelopment())
     configs.AddUserSecrets("analytics client");
 
-configs.AddJsonFile("../configs.json", true, true);
-
-Console.WriteLine("ss");
-Console.WriteLine(configs["localEndpoint"]);
-Console.ReadLine();
-
+var fullConfigPath = Path.GetFullPath("../configs.json");
+configs.AddJsonFile(fullConfigPath, true, true);
 
 var services = builder.Services;
 
