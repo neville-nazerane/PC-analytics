@@ -400,3 +400,4 @@ FodyWeavers.xsd
 *.sln.iml
 /pipelines/published
 /pipelines/configs.json
+/pipelines/analytics
