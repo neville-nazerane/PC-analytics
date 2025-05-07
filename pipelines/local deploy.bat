@@ -5,9 +5,11 @@ mkdir analytics\ClientBackground
 dotnet publish ..\src\PcAnalytics.ClientApi -c Release -o analytics\ClientApi
 dotnet publish ..\src\PcAnalytics.ClientBackground -c Release -o analytics\ClientBackground
 
-echo @echo off > published\run.bat
-echo start "" /min ClientApi\PcAnalytics.ClientApi.exe >> analytics\run.bat
+echo taskkill /f /im PcAnalytics.ClientApi.exe >nul 2>nul >> analytics\run.bat
+echo taskkill /f /im PcAnalytics.ClientBackground.exe >nul 2>nul >> analytics\run.bat
+echo start "" /min ClientApi\PcAnalytics.ClientApi.exe --urls http://localhost:6060 >> analytics\run.bat
 echo start "" /min ClientBackground\PcAnalytics.ClientBackground.exe >> analytics\run.bat
+
 
 if exist configs.json (
     copy /Y configs.json analytics\configs.json
@@ -15,7 +17,8 @@ if exist configs.json (
     > published\configs.json (
         echo {
         echo   "storagePath": "",
-        echo   "onlineEndpoint": ""
+        echo   "onlineEndpoint": "",
+        echo   "localEndpoint": ""
         echo }
     )
 )

@@ -8,6 +8,11 @@ if (builder.Environment.IsDevelopment())
 
 configs.AddJsonFile("../configs.json", true, true);
 
+Console.WriteLine("ss");
+Console.WriteLine(configs["localEndpoint"]);
+Console.ReadLine();
+
+
 var services = builder.Services;
 
 services.AddHttpClient<LocalApiConsumer>(c =>
