@@ -18,11 +18,13 @@ namespace PcAnalytics.OnlineApi
             var group = endpoints.MapGroup("");
 
             group.MapPost("sensorInputs", AddSensorInputAsync);
+            group.MapGet("computers", GetComputersAsync);
+            group.MapGet("computer/{computerId}/hardware", GetHardwareAsync);
 
             return group;
         }
 
-        public static async Task AddSensorInputAsync(HttpRequest request,
+        static async Task AddSensorInputAsync(HttpRequest request,
                                                     [FromBody] IEnumerable<SensorInput> input,
                                                     AppDbContext dbContext,
                                                     CancellationToken cancellationToken = default)
@@ -73,6 +75,13 @@ namespace PcAnalytics.OnlineApi
             else throw new Exception("No serial header found");
         }
 
+        static async Task<IEnumerable<Computer>> GetComputersAsync(AppDbContext dbContext)
+            => await dbContext.Computers.ToListAsync();
 
+        static IAsyncEnumerable<Hardware> GetHardwareAsync(AppDbContext dbContext, int computerId) 
+            => dbContext.Hardwares
+                        .Include(h => h.SensorGroups)
+                        .Where(h => h.ComputerId == computerId)
+                        .AsAsyncEnumerable();
     }
 }

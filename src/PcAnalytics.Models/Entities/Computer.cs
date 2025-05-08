@@ -18,7 +18,7 @@ namespace PcAnalytics.Models.Entities
 
         public string? FriendlyName { get; set; }
 
-        public IEnumerable<Record>? Records { get; set; }
+        public IEnumerable<Hardware>? Hardware { get; set; }
 
     }
 }
