@@ -75,13 +75,14 @@ namespace PcAnalytics.OnlineApi
             else throw new Exception("No serial header found");
         }
 
-        static async Task<IEnumerable<Computer>> GetComputersAsync(AppDbContext dbContext)
-            => await dbContext.Computers.ToListAsync();
+        static async Task<IEnumerable<Computer>> GetComputersAsync(AppDbContext dbContext, CancellationToken cancellationToken = default)
+            => await dbContext.Computers.ToListAsync(cancellationToken);
 
-        static IAsyncEnumerable<Hardware> GetHardwareAsync(AppDbContext dbContext, int computerId) 
-            => dbContext.Hardwares
-                        .Include(h => h.SensorGroups)
-                        .Where(h => h.ComputerId == computerId)
-                        .AsAsyncEnumerable();
+        static async Task<IEnumerable<Hardware>> GetHardwareAsync(AppDbContext dbContext, int computerId, CancellationToken cancellationToken = default) 
+            => await dbContext.Hardwares
+                                .Include(h => h.SensorGroups)
+                                .Where(h => h.ComputerId == computerId)
+                                .ToListAsync(cancellationToken);
+
     }
 }

